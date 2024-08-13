@@ -1,2 +1,2 @@
 # Shell
-Rust Cargo 
+Trying to rebuild the shell project using rust
