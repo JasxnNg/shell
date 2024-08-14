@@ -1,24 +1,16 @@
 mod parser;
 mod pipe;
+mod misc;
 
 use std::process::Command;
-use std::io::stdin;
-use std::env;
-use whoami;
-use colored::Colorize;
+use std::io;
 
-fn path(){
-    let user = whoami::username();
-    let device = whoami::devicename();
-    let path = env::current_dir().expect("what the sigma");
-    print!("{}@{}: {}", user, device, path.display()).flush();
 
-}
 fn main(){
     loop{
-    path();
+    misc::path();
     let mut input = String::new();
-    stdin().read_line(&mut input).unwrap();
+    io::stdin().read_line(&mut input).unwrap();
 
     let mut split = input.trim().split_whitespace();
     let command = split.next().unwrap();
@@ -43,6 +35,7 @@ Note to self:
     - read fork documentation 
     - lexer and pipe 
     - strtokenizer
+    - error handling 
 
     let err = exec::execvp("echo", &["echo", "foo"]);
     println!("Error: {}", err);
