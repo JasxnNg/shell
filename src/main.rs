@@ -7,11 +7,17 @@ use std::io;
 
 
 fn main(){
-    loop{
     misc::path();
+    loop{
+   
+
+    // println!("printed path"); 
+
+
     let mut input = String::new();
     io::stdin().read_line(&mut input).unwrap();
 
+    // println!("printed shit");
     let mut split = input.trim().split_whitespace();
     let command = split.next().unwrap();
     let args = split;
@@ -21,11 +27,20 @@ fn main(){
 
     // println!("Running command: {}", command);
 
-    Command::new(command)
+    // for i in args.clone() {
+    //     println!("executed {}", i);
+    // }
+
+    let mut child = Command::new(command)
         .args(args)
         .spawn()
-        .unwrap();
+        .expect("command failed");
+    child.wait().expect("couldn't wait");
+
+   
+    misc::path();
     }
+
 }
 /*
 
