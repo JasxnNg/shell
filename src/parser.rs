@@ -1,3 +1,4 @@
+
 /*
 Recall that we need to use the declarator "pub" to do something
 */
@@ -21,7 +22,7 @@ pub fn execute (input: &str) {
         match command {
             "exit" => {
                 process::exit(0);
-            }
+            },
             "cd" => {
                 let root: Vec<&str> = split.collect();
                 if root.len() > 1{
@@ -29,11 +30,17 @@ pub fn execute (input: &str) {
                 }
                 else {
                     let root = root.join("");
-                    let root = Path::new(&root);
-                    env::set_current_dir(&root).unwrap();
+                    let path = Path::new(&root);
+                    let success = env::set_current_dir(&path);
+                        match success {
+                            Ok(success) => {success},
+                            Err(_error) => {
+                                println!("cd: no such file or directory: {}", root);
+                            }
+                        }
                 }
                 
-            }
+            },
             _ => {
                 let mut child = process::Command::new(command)
                 .args(split)
