@@ -28,7 +28,8 @@ Note to self:
     - tab autocomplete
     - uparrow
 
-
+    - fix error handling 
+    https://doc.rust-lang.org/book/ch09-02-recoverable-errors-with-result.html
 
     let err = exec::execvp("echo", &["echo", "foo"]);
     println!("Error: {}", err);
