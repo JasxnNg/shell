@@ -24,6 +24,11 @@ Note to self:
     - lexer and pipe 
     - strtokenizer
     - error handling 
+    - built in function
+    - tab autocomplete
+    - uparrow
+
+
 
     let err = exec::execvp("echo", &["echo", "foo"]);
     println!("Error: {}", err);

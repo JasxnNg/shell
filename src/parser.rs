@@ -1,11 +1,13 @@
 /*
 Recall that we need to use the declarator "pub" to do something
 */
-use std::process::Command;
+use std::process;
+use std::env;
+use std::path::Path;
 
-fn parse() {
+// fn parse(input: SplitWhitespace) {
 
-}
+// }
 
 
 pub fn execute (input: &str) {
@@ -15,11 +17,34 @@ pub fn execute (input: &str) {
         let mut split = token.split_whitespace();
         let command = split.next().unwrap();
 
-        let mut child = Command::new(command)
-            .args(split)
-            .spawn()
-            .expect("command failed");
-        child.wait().expect("couldn't wait");
+        // manage if command == cd / exit / 
+        match command {
+            "exit" => {
+                process::exit(0);
+            }
+            "cd" => {
+                let root: Vec<&str> = split.collect();
+                if root.len() > 1{
+                    println!("too many arguments")
+                }
+                else {
+                    let root = root.join("");
+                    let root = Path::new(&root);
+                    env::set_current_dir(&root).unwrap();
+                }
+                
+            }
+            _ => {
+                let mut child = process::Command::new(command)
+                .args(split)
+                .spawn()
+                .expect("command failed");
+
+                child.wait().expect("couldn't wait");
+            }
+        }
+
+        
     }
 
 
