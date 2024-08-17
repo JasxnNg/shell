@@ -27,6 +27,7 @@ Note to self:
     - built in function
     - tab autocomplete
     - uparrow
+    https://docs.rs/crossterm/0.17.7/crossterm/event/struct.KeyEvent.html
 
     - fix error handling 
     https://doc.rust-lang.org/book/ch09-02-recoverable-errors-with-result.html

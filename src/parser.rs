@@ -8,6 +8,9 @@ use std::path::Path;
 
 // fn parse(input: SplitWhitespace) {
 
+    // need to be able to parse the input differently
+
+
 // }
 
 
@@ -42,12 +45,18 @@ pub fn execute (input: &str) {
                 
             },
             _ => {
-                let mut child = process::Command::new(command)
+                let child = process::Command::new(command)
                 .args(split)
-                .spawn()
-                .expect("command failed");
+                .spawn();
+                
+                match child {
+                    Ok(mut child) => {child.wait().expect("couldn't wait");}
+                    Err(_error) => {
+                        println!("Command not found: {}", command);
+                    }
+                }
 
-                child.wait().expect("couldn't wait");
+            
             }
         }
 
