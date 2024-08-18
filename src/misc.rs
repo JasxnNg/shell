@@ -17,7 +17,7 @@ use std::thread;
 
 pub fn sighandler (childprocessid: i32)  {
     // handle sigint 
-    let mut signals = Signals::new(&[SIGINT, SIGTERM, SIGHUP]).expect("Failed to create signal handler");
+    let mut signals = Signals::new(&[SIGINT]).expect("Failed to create signal handler");
 
     // Spawn a thread to handle the signals
     thread::spawn(move || {
@@ -35,14 +35,6 @@ pub fn sighandler (childprocessid: i32)  {
                             
                         }
                     }
-                }
-                SIGTERM => {
-                    println!("Received SIGTERM, exiting...");
-                    std::process::exit(0);
-                }
-                SIGHUP => {
-                    println!("Received SIGHUP, reloading configuration...");
-                    // Add your configuration reload logic here
                 }
                 _ => unreachable!(),
             }
