@@ -7,11 +7,13 @@ use std::io;
 
 
 fn main(){
+    
     loop{
         misc::path();
         let mut input = String::new(); 
         io::stdin().read_line(&mut input).unwrap();
         parser::execute(&input);
+        
     }
 
 }

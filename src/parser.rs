@@ -2,9 +2,12 @@
 /*
 Recall that we need to use the declarator "pub" to do something
 */
+
 use std::process;
 use std::env;
 use std::path::Path;
+
+use crate::misc::sighandler;
 
 // fn parse(input: SplitWhitespace) {
 
@@ -29,7 +32,8 @@ pub fn execute (input: &str) {
             "cd" => {
                 let root: Vec<&str> = split.collect();
                 if root.len() > 1{
-                    println!("too many arguments")
+                    println!("too many arguments"); 
+                    // this isn't actually how cd works but for our purposes... let's pretend like it is
                 }
                 else {
                     let root = root.join("");
@@ -44,13 +48,18 @@ pub fn execute (input: &str) {
                 }
                 
             },
-            _ => {
+            _ => { 
+                // I should probably have a separate way to handle all of this
                 let child = process::Command::new(command)
                 .args(split)
                 .spawn();
                 
                 match child {
-                    Ok(mut child) => {child.wait().expect("couldn't wait");}
+                    Ok(mut child) => {
+                        let childprocessid = child.id();
+                        sighandler(childprocessid as i32); 
+                        child.wait().expect("couldn't wait");
+                    }
                     Err(_error) => {
                         println!("Command not found: {}", command);
                     }
