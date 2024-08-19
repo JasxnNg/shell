@@ -8,6 +8,7 @@ use std::io;
 
 fn main(){
     misc::throwitout();
+    
     loop{
         misc::path();
         let mut input = String::new(); 
