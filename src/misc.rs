@@ -13,26 +13,52 @@ use signal_hook::consts::signal::*;
 use signal_hook::iterator::Signals;
 use std::thread;
 
+pub fn throwitout () {
+    let mut signals = Signals::new(&[SIGINT, SIGTERM]).expect("Failed to create signal handler");
+    
+    thread::spawn(move || {
+        for sig in signals.forever()  {
+            match sig {
+                SIGINT => {
 
+                },
+                _ => unreachable!(),
+            }
+        }
+
+    });
+}
 
 pub fn sighandler (childprocessid: i32)  {
     // handle sigint 
-    let mut signals = Signals::new(&[SIGINT]).expect("Failed to create signal handler");
+    let mut signals = Signals::new(&[SIGINT, SIGTERM]).expect("Failed to create signal handler");
 
     // Spawn a thread to handle the signals
     thread::spawn(move || {
-        for sig in signals.forever() {
+        for sig in signals.forever() 
+        // this is really scuffed because it loops through all of the signals that you placed
+         {
             match sig {
                 SIGINT => {
                     // println!("Received SIGINT, killing child process...");
                     let var = signal::kill(Pid::from_raw(childprocessid), Signal::SIGTERM);
                     match var {
                         Ok(_) => {
-                            
-                        
+                            // tf do i do if this is okay?
                         }
                         Err(_) => {
+                            // ermm.. you gotta crash out then
+                        }
+                    }
+                }
+                SIGTERM => {
+                    let var = signal::kill(Pid::from_raw(childprocessid), Signal::SIGTERM);
+                    match var {
+                        Ok(_) => {
                             
+                        }
+                        Err(_) => {
+                           
                         }
                     }
                 }
