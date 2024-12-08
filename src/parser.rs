@@ -37,6 +37,7 @@ thread 'main' panicked at src/parser.rs:30:40:
 called `Option::unwrap()` on a `None` value
 //https://stackoverflow.com/questions/23430735/how-to-convert-vecchar-to-a-string
  */
+    let mut boolean = false; 
     while end < input.len() {
         // this doesn't really work for non-ascii characters 
         let c = input.chars().nth(end).unwrap(); 
