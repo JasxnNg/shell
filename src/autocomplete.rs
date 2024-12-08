@@ -58,7 +58,7 @@ pub fn create_all_variables(input: &str, tree : &Tree) -> Vec<String> {
         for (_, value) in node.children.iter() {
             stack.push((value, string.clone()));
         }
-        if variables.len() > 5 {
+        if variables.len() > 10 {
             break;
         }
     }

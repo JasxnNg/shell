@@ -7,8 +7,6 @@ use std::process;
 use std::env;
 use std::path::Path;
 
-use nix::libc::boolean_t;
-
 use crate::autocomplete::Tree;
 use crate::autocomplete;
 use crate::misc;
@@ -157,6 +155,7 @@ pub fn execute (input: &str, autocomplete: &mut Tree) {
                                 // println!("{}", val);
                             }
                             if boolean {
+                                println!("Found similar commands:"); 
                                 let val = autocomplete::create_all_variables(&command[..command.len() - 1], copy);
                                 for variable in val {
                                     println!("{}", variable);
