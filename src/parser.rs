@@ -7,6 +7,7 @@ use std::process;
 use std::env;
 use std::path::Path;
 
+use crate::autocomplete::Tree;
 use crate::misc;
 
 
@@ -59,7 +60,7 @@ called `Option::unwrap()` on a `None` value
 }
 
 
-pub fn execute (input: &str) {
+pub fn execute (input: &str, autocomplete: &Tree) {
     
     // there's other interesting behavior when it comes to shells with EOF
     if input.len() == 0{

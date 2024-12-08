@@ -6,11 +6,15 @@ mod autocomplete;
 
 use std::io;
 
+use autocomplete::create_all_variables;
+
 
 fn main(){
-    // misc::throwitout();
-    // misc::preamble();
+    misc::throwitout();
+    misc::preamble();
     let words = autocomplete::create_struct();
+    create_all_variables(&words);
+    create_all_variables(&words);
     // println!("{}", words);
     // loop{
     //     misc::path();
