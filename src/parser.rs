@@ -7,16 +7,37 @@ use std::process;
 use std::env;
 use std::path::Path;
 
-use crate::misc::sighandler;
+use crate::misc;
+
 
 fn parse (input: &str)-> Vec<&str> {
     let mut tokens: Vec<&str> = Vec::new();
 
     let mut start = 0; 
     let mut end = 0; 
-    // use a stack to figure out how to do the quotes 
+
+    // let mut char = 0;
+    // input.chars()
+    //     .for_each(|c|  {
+    //         print!("{}: {}", char, c);
+    //         char+=1;
+    //          // this is a Result and should be handled properly
+    //     });
+    // println!();
+    // println!("hi : {} {}", input.chars().nth(end).unwrap(), input.len());
+    // interesting behavior
+/*
+jasxnng@jing:~/Work/shell$ ∂
+∂
+0: ∂
+hi : ∂ 3
+thread 'main' panicked at src/parser.rs:30:40:
+called `Option::unwrap()` on a `None` value
+//https://stackoverflow.com/questions/23430735/how-to-convert-vecchar-to-a-string
+ */
     while end < input.len() {
-        let c = input.chars().nth(end).unwrap();
+        // this doesn't really work for non-ascii characters 
+        let c = input.chars().nth(end).unwrap(); 
         if c == ' ' || c == '\n' || c == '\t' {
             if end > start {
                 tokens.push(&input[start..end]);
@@ -39,13 +60,17 @@ fn parse (input: &str)-> Vec<&str> {
 
 
 pub fn execute (input: &str) {
+    
+    // there's other interesting behavior when it comes to shells with EOF
+    if input.len() == 0{
+        println!("\nDetected an EOF character. Exiting process...");
+        process::exit(0);
+    }
+        
     let sentence = input.trim().split(";"); // trim the carriage return / new line
-
+    
+    // I should add a method to just print out a new thing if we have empty
     for token in sentence{
-        let mut split = token.split_whitespace();
-        let command = split.next().unwrap();
-
-
         
         let mut parsedcommand = parse(token);
         let command = parsedcommand[0]; 
@@ -59,22 +84,41 @@ pub fn execute (input: &str) {
                 process::exit(0);
             },
             "cd" => {
-                // let root: Vec<&str> = split.collect();
-                // if root.len() > 1{
-                //     println!("too many arguments"); 
-                //     // this isn't actually how cd works but for our purposes... let's pretend like it is
-                // }
-                // else {
-                //     let root = root.join("");
-                //     let path = Path::new(&root);
-                //     let success = env::set_current_dir(&path);
-                //         match success {
-                //             Ok(success) => {success},
-                //             Err(_error) => {
-                //                 println!("cd: no such file or directory: {}", root);
-                //             }
-                //         }
-                // }
+                
+        
+                if split.len() > 1{
+                    println!("too many arguments"); 
+                    // this isn't actually how cd works but for our purposes... let's pretend like it is
+                    
+                }
+                else {
+                    let root = split.join("");
+
+                    if root.len() == 0 || root == "~" {
+                        let user = misc::get_user();
+                        let pathname = format!("/Users/{}", user);
+                        let path = Path::new(&pathname);
+                        let success = env::set_current_dir(&path);
+                        match success {
+                            Ok(success) => {success},
+                            Err(_error) => {
+                                println!("cd: no such file or directory: {}", root);
+                            }
+                        }
+                    }
+                    else {
+                        let path = Path::new(&root);
+                    
+                        let success = env::set_current_dir(&path);
+                            match success {
+                                Ok(success) => {success},
+                                Err(_error) => {
+                                    println!("cd: no such file or directory: {}", root);
+                                }
+                            }
+                    }
+
+                }
                 
             },
             _ => { 
@@ -86,7 +130,7 @@ pub fn execute (input: &str) {
                 match child {
                     Ok(mut child) => {
                         let childprocessid = child.id();
-                        sighandler(childprocessid as i32); 
+                        misc::sighandler(childprocessid as i32); 
                         child.wait().expect("couldn't wait");
                     }
                     Err(_error) => {
@@ -103,3 +147,4 @@ pub fn execute (input: &str) {
 
 
 }
+

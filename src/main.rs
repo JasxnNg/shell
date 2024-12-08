@@ -1,6 +1,7 @@
 mod parser;
 mod pipe;
 mod misc;
+mod autocomplete;
 
 
 use std::io;
@@ -8,11 +9,13 @@ use std::io;
 
 fn main(){
     misc::throwitout();
-    
+    misc::preamble();
+    let words = autocomplete::create_struct();
     loop{
         misc::path();
         let mut input = String::new(); 
         io::stdin().read_line(&mut input).unwrap();
+        // I have to figure out a way 
         parser::execute(&input);
         
     }

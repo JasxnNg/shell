@@ -95,3 +95,13 @@ pub fn path(){
     io::stdout().flush().unwrap();
 
 }
+
+pub fn get_user() -> String{
+    let user: String = whoami::username();
+    return user; 
+}
+
+pub fn preamble() {
+    println!("\x1b[93mThis is a toy shell written in rust. © Jason Ng 2024\nWarning: this shell is unstable... use at your own risk!\x1b[0m");
+
+}
