@@ -13,17 +13,15 @@ fn main(){
     misc::throwitout();
     misc::preamble();
     let words = autocomplete::create_struct();
-    create_all_variables(&words);
-    create_all_variables(&words);
     // println!("{}", words);
-    // loop{
-    //     misc::path();
-    //     let mut input = String::new(); 
-    //     io::stdin().read_line(&mut input).unwrap();
-    //     // I have to figure out a way 
-    //     parser::execute(&input);
+    loop{
+        misc::path();
+        let mut input = String::new(); 
+        io::stdin().read_line(&mut input).unwrap();
+        // I have to figure out a way 
+        parser::execute(&input, &words);
         
-    // }
+    }
 
 }
 /*

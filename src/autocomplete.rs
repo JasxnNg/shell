@@ -45,7 +45,7 @@ pub fn create_struct( ) -> Tree<'static>{
 
 }
 
-pub fn create_all_variables(tree : &Tree) -> Vec<String> {
+pub fn create_all_variables(input: &str, tree : &Tree) -> Vec<String> {
     let mut variables: Vec<String> = Vec::new();
     let mut stack: Vec<(&Tree, String)> = Vec::new();
     stack.push((tree, "".to_string()));
@@ -53,19 +53,12 @@ pub fn create_all_variables(tree : &Tree) -> Vec<String> {
         let (node, mut string) = stack.pop().unwrap();
         string.push_str(node.name);
         if node.value > 0 {
-            variables.push(string.clone());
+            variables.push(input.to_owned() + &string.clone());
         }
         for (_, value) in node.children.iter() {
             stack.push((value, string.clone()));
         }
     }
-    // for variable in variables.iter() {
-    //     println!("{}", variable);
-    // }
+
     return variables;
-}
-
-pub fn autocorrect(input: &str) {
-    
-
 }

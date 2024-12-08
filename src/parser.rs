@@ -8,6 +8,7 @@ use std::env;
 use std::path::Path;
 
 use crate::autocomplete::Tree;
+use crate::autocomplete;
 use crate::misc;
 
 
@@ -137,6 +138,13 @@ pub fn execute (input: &str, autocomplete: &Tree) {
                     }
                     Err(_error) => {
                         println!("Command not found: {}", command);
+                        if command == "" {
+                            println!("Please enter a command");
+                        }
+                        else {
+                            for variable in autocomplete::create_all_variables(command, autocomplete).iter() {
+                                println!("{}", variable);
+                            }
                     }
                 }
 
@@ -147,6 +155,8 @@ pub fn execute (input: &str, autocomplete: &Tree) {
         
     }
 
+
+}
 
 }
 
