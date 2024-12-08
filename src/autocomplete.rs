@@ -1,11 +1,12 @@
-use std::process;
-struct Tree{
-    name: char, 
+use std::{collections::HashMap, process};
+pub struct Tree<'a>{
+    name: &'a str, 
     value: i32, 
-    children: Vec<Tree>
+    children: HashMap<String, Tree<'a>>
 }
 
-pub fn create_struct( ) -> String{
+
+pub fn create_struct( ) -> Tree<'static>{
 
     let output = process::Command::new("bash")
         .arg("-c")
@@ -15,11 +16,32 @@ pub fn create_struct( ) -> String{
         .expect("Error: compgen doesn't exist");
     let stdout = String::from_utf8(output.stdout).unwrap();
     let split: Vec<&str> = stdout.split("\n").collect();
-    for i in split.into_iter(){
-        println!("{}", i);
+    let mut tree: Tree = Tree {
+        name: "",
+        value: 0, 
+        children: HashMap::new()
+    };
+
+    for string in split.into_iter() {
+        let mut copy = &mut tree;
+        for val in string.chars() {
+            let string = val.to_string();
+            if copy.children.contains_key(&string) {
+                copy = copy.children.get_mut(&string).unwrap();
+            } else {
+                let new_tree = Tree {
+                    name: Box::leak(string.clone().into_boxed_str()),
+                    value: 0,
+                    children: HashMap::new(),
+                };
+                copy.children.insert(string.clone(), new_tree);
+                copy = copy.children.get_mut(&string).unwrap();
+            }
+        }
+        copy.value += 1; // change the final copy value and increase it by 1
     }
-    let tree = Tree;
-    return stdout;
+
+    return tree;
 
 }
 
