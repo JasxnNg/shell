@@ -7,6 +7,8 @@ use std::process;
 use std::env;
 use std::path::Path;
 
+use nix::libc::boolean_t;
+
 use crate::autocomplete::Tree;
 use crate::autocomplete;
 use crate::misc;
@@ -61,7 +63,7 @@ called `Option::unwrap()` on a `None` value
 }
 
 
-pub fn execute (input: &str, autocomplete: &Tree) {
+pub fn execute (input: &str, autocomplete: &mut Tree) {
     
     // there's other interesting behavior when it comes to shells with EOF
     if input.len() == 0{
@@ -142,9 +144,25 @@ pub fn execute (input: &str, autocomplete: &Tree) {
                             println!("Please enter a command");
                         }
                         else {
-                            for variable in autocomplete::create_all_variables(command, autocomplete).iter() {
-                                println!("{}", variable);
+                            let mut boolean = true;
+                            let mut copy: &mut Tree = autocomplete;
+                            for val in command.chars() {
+                                let string = val.to_string();
+                                if copy.children.contains_key(&string) {
+                                    copy = copy.children.get_mut(&string).unwrap();
+                                } else {
+                                    boolean = false;
+                                    break;
+                                }
+                                // println!("{}", val);
                             }
+                            if boolean {
+                                let val = autocomplete::create_all_variables(&command[..command.len() - 1], copy);
+                                for variable in val {
+                                    println!("{}", variable);
+                                }
+                            }
+
                     }
                 }
 

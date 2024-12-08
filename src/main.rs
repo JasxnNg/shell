@@ -6,20 +6,18 @@ mod autocomplete;
 
 use std::io;
 
-use autocomplete::create_all_variables;
-
 
 fn main(){
     misc::throwitout();
     misc::preamble();
-    let words = autocomplete::create_struct();
+    let words = &mut autocomplete::create_struct();
     // println!("{}", words);
     loop{
         misc::path();
         let mut input = String::new(); 
         io::stdin().read_line(&mut input).unwrap();
         // I have to figure out a way 
-        parser::execute(&input, &words);
+        parser::execute(&input, words);
         
     }
 

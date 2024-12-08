@@ -1,8 +1,8 @@
 use std::{collections::HashMap, process};
 pub struct Tree<'a>{
-    name: &'a str, 
-    value: i32, 
-    children: HashMap<String, Tree<'a>>
+    pub name: &'a str, 
+    pub value: i32, 
+    pub children: HashMap<String, Tree<'a>>
 }
 
 
@@ -57,6 +57,9 @@ pub fn create_all_variables(input: &str, tree : &Tree) -> Vec<String> {
         }
         for (_, value) in node.children.iter() {
             stack.push((value, string.clone()));
+        }
+        if variables.len() > 5 {
+            break;
         }
     }
 
