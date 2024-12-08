@@ -123,6 +123,7 @@ pub fn execute (input: &str) {
             },
             _ => { 
                 // I should probably have a separate way to handle all of this
+
                 let child = process::Command::new(command)
                 .args(split)
                 .spawn();
