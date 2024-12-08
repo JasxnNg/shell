@@ -17,6 +17,8 @@ fn parse (input: &str)-> Vec<&str> {
 
     let mut start = 0; 
     let mut end = 0; 
+    let mut counter = 0; 
+    let mut current: i32 = 0;
 
     // let mut char = 0;
     // input.chars()
@@ -37,13 +39,21 @@ thread 'main' panicked at src/parser.rs:30:40:
 called `Option::unwrap()` on a `None` value
 //https://stackoverflow.com/questions/23430735/how-to-convert-vecchar-to-a-string
  */
-    let mut boolean = false; 
+    let mut boolean = true; 
     while end < input.len() {
         // this doesn't really work for non-ascii characters 
         let c = input.chars().nth(end).unwrap(); 
-        if c == ' ' || c == '\n' || c == '\t' {
-            if end > start {
+        if c == '"'{
+            boolean = !boolean;
+            counter += 1;
+        }
+        if (c == ' ' || c == '\n' || c == '\t' || c == '"') && boolean{
+            if end > start && counter == current {
                 tokens.push(&input[start..end]);
+            }
+            else if end > start && counter != current{
+                tokens.push(&input[start + 1..end]);
+                current = counter;
             }
             end += 1;
             start = end;
@@ -53,6 +63,14 @@ called `Option::unwrap()` on a `None` value
         }
     }
     tokens.push(&input[start..end]);
+
+    if tokens[tokens.len() - 1] == "" {
+        tokens.pop();
+    }
+
+    // for char in tokens.clone().into_iter(){
+    //     println!("{}", char);
+    // }
 
     // need to be able to parse the input differently
     // https://stackoverflow.com/questions/27475113/how-to-check-for-eof-with-read-line
