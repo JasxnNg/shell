@@ -8,3 +8,6 @@ colored = "2.1.0"
 nix = {version = "0.29.0", features = ["process", "signal"]}
 whoami = "1.5.1"
 signal-hook = "0.3"
+ratatui = "0.29.0"
+crossterm = "0.28.1"
+color-eyre = "0.6.3"

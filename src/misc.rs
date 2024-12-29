@@ -1,5 +1,5 @@
 use whoami;
-use std::env::current_dir;
+use std::env::{current_dir, join_paths};
 use std::io::{self, Write};
 use colored::Colorize;
 
@@ -70,7 +70,7 @@ pub fn sighandler (childprocessid: i32)  {
 }
 
 
-pub fn path(){
+pub fn path() -> String {
     // username, device name, and path name
     let user: String = whoami::username();
     let device: String = whoami::fallible::hostname().unwrap();
@@ -83,16 +83,20 @@ pub fn path(){
 
     if parts.len() > 1 {
         let tilde = "~";
-        let joined_path = &(format!("{}{}", tilde, parts[1]));
-        print!("{}{}{}:{}$ ", user.green(), "@".purple(), device.green(), joined_path.purple());
+        let joined_path = format!("{}{}", tilde, parts[1]);
+        return format!("{}{}{}:{}$ ", user, "@", device, joined_path);
+        // print!("{}{}{}:{}$ ", user.green(), "@".purple(), device.green(), joined_path.purple());
     }
     else {
-        let joined_path = parts[0];
-        print!("{}{}{}:{}$ ", user.green(), "@".purple(), device.green(), joined_path.purple());
+        let joined_path = String::from(parts[0]);
+        return format!("{}{}{}:{}$ ", user, "@", device, joined_path);
+        // return String::from(joined_path);
+        // print!("{}{}{}:{}$ ", user.green(), "@".purple(), device.green(), joined_path.purple());
     }
 
 
-    io::stdout().flush().unwrap();
+
+    // io::stdout().flush().unwrap();
 
 }
 
